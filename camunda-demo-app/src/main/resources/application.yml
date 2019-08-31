@@ -1,0 +1,10 @@
+camunda:
+  bpm:
+    database:
+      type: h2
+    admin-user:
+      id: admin
+      password: admin
+      firstName: Admin
+    filter:
+      create: All tasks

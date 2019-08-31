@@ -1,0 +1,7 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.h2database:h2'
+
+    implementation "org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp:$camundaVersion"
+    implementation "org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-rest:$camundaVersion"
+}
