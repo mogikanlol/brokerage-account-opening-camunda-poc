@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.1.7.RELEASE' apply false
     id 'io.spring.dependency-management' version '1.0.8.RELEASE' apply false
+    id 'io.freefair.lombok' version '4.0.1' apply false
 }
 
 group 'com.example.bpm'
@@ -15,6 +16,7 @@ configure(subprojects) {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'io.freefair.lombok'
 
     sourceCompatibility = 1.8
 

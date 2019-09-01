@@ -8,3 +8,7 @@ camunda:
       firstName: Admin
     filter:
       create: All tasks
+
+server:
+  servlet:
+    context-path: /api/bpm
