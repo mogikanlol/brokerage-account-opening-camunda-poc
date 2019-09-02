@@ -1,37 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0qzn2f9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.2.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0qzn2f9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.2.1">
   <bpmn:process id="DepositOpening" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0o3zdb2</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:endEvent id="EndEvent_13glij9">
-      <bpmn:incoming>SequenceFlow_1jar0lb</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0piqmq1</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0o3zdb2" sourceRef="StartEvent_1" targetRef="ServiceTask_1qjn8jl" />
     <bpmn:serviceTask id="ServiceTask_1qjn8jl" name="Init Deposit Agreement" camunda:delegateExpression="${initAgreementDelegate}">
       <bpmn:incoming>SequenceFlow_0o3zdb2</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1jar0lb</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1jar0lb" sourceRef="ServiceTask_1qjn8jl" targetRef="EndEvent_13glij9" />
+    <bpmn:sequenceFlow id="SequenceFlow_1jar0lb" sourceRef="ServiceTask_1qjn8jl" targetRef="Task_1g172y2" />
+    <bpmn:sequenceFlow id="SequenceFlow_0wrf5eu" sourceRef="IntermediateThrowEvent_1ip46qv" targetRef="ExclusiveGateway_1ocyrtd" />
+    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_1ip46qv" name="Deposit Agreement Response Event">
+      <bpmn:incoming>SequenceFlow_0071tv4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0wrf5eu</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_1m2905x" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0071tv4" sourceRef="Task_1g172y2" targetRef="IntermediateThrowEvent_1ip46qv" />
+    <bpmn:sendTask id="Task_1g172y2" name="Send Deposit Request" camunda:delegateExpression="${sendDepositRequestDelegate}">
+      <bpmn:incoming>SequenceFlow_1jar0lb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0071tv4</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1ocyrtd">
+      <bpmn:incoming>SequenceFlow_0wrf5eu</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0piqmq1</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0gvawqe</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0piqmq1" name="accepted" sourceRef="ExclusiveGateway_1ocyrtd" targetRef="EndEvent_13glij9">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${depositRequestConfirmedByBank}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="EndEvent_137vu91">
+      <bpmn:incoming>SequenceFlow_0gvawqe</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0gvawqe" name="declined" sourceRef="ExclusiveGateway_1ocyrtd" targetRef="EndEvent_137vu91">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${not depositRequestConfirmedByBank}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
+  <bpmn:message id="Message_1m2905x" name="depositAgreementResponseEvent" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="DepositOpening">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="156" y="81" width="36" height="36" />
+        <dc:Bounds x="156" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_13glij9_di" bpmnElement="EndEvent_13glij9">
-        <dc:Bounds x="442" y="81" width="36" height="36" />
+        <dc:Bounds x="892" y="81" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0o3zdb2_di" bpmnElement="SequenceFlow_0o3zdb2">
-        <di:waypoint x="192" y="99" />
-        <di:waypoint x="270" y="99" />
+        <di:waypoint x="192" y="190" />
+        <di:waypoint x="270" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1qjn8jl_di" bpmnElement="ServiceTask_1qjn8jl">
-        <dc:Bounds x="270" y="59" width="100" height="80" />
+        <dc:Bounds x="270" y="150" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1jar0lb_di" bpmnElement="SequenceFlow_1jar0lb">
-        <di:waypoint x="370" y="99" />
-        <di:waypoint x="442" y="99" />
+        <di:waypoint x="370" y="190" />
+        <di:waypoint x="440" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0wrf5eu_di" bpmnElement="SequenceFlow_0wrf5eu">
+        <di:waypoint x="648" y="190" />
+        <di:waypoint x="715" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_1pyf0po_di" bpmnElement="IntermediateThrowEvent_1ip46qv">
+        <dc:Bounds x="612" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="590" y="215" width="82" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0071tv4_di" bpmnElement="SequenceFlow_0071tv4">
+        <di:waypoint x="540" y="190" />
+        <di:waypoint x="612" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="SendTask_0wfp061_di" bpmnElement="Task_1g172y2">
+        <dc:Bounds x="440" y="150" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1ocyrtd_di" bpmnElement="ExclusiveGateway_1ocyrtd" isMarkerVisible="true">
+        <dc:Bounds x="715" y="165" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0piqmq1_di" bpmnElement="SequenceFlow_0piqmq1">
+        <di:waypoint x="740" y="165" />
+        <di:waypoint x="740" y="99" />
+        <di:waypoint x="892" y="99" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="677" y="113" width="45" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_137vu91_di" bpmnElement="EndEvent_137vu91">
+        <dc:Bounds x="892" y="261" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0gvawqe_di" bpmnElement="SequenceFlow_0gvawqe">
+        <di:waypoint x="740" y="215" />
+        <di:waypoint x="740" y="279" />
+        <di:waypoint x="892" y="279" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="679" y="272" width="41" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
