@@ -1,8 +1,14 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
+    implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.h2database:h2'
 
     implementation "org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp:$camundaVersion"
     implementation "org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-rest:$camundaVersion"
+
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+
+    runtimeOnly 'org.apache.groovy:groovy-jsr223:4.0.15'
+
+
 }

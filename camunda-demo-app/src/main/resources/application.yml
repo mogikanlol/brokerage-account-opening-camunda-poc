@@ -12,16 +12,3 @@ camunda:
 server:
   servlet:
     context-path: /api/bpm
-
-spring:
-  cloud:
-    stream:
-      default:
-        consumer:
-          max-attempts: 1
-      kafka:
-        binder:
-          brokers: localhost:9092
-          configuration:
-            key:
-              serializer: org.apache.kafka.common.serialization.StringSerializer
